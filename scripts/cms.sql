@@ -80,12 +80,10 @@ ALTER TABLE `cms_block_store`
 ALTER TABLE `cms_page_store`
     ADD CONSTRAINT `CMS_PAGE_STORE_PAGE_ID_CMS_PAGE_PAGE_ID` FOREIGN KEY (`page_id`) REFERENCES `cms_page` (`page_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
--- Ajuste Nogara
+-- Removing foreign key
 
 ALTER TABLE `magento_versionscms_hierarchy_node`
 DROP FOREIGN KEY `FK_12C2962523CC7EF2EA73AD4121B5DBFF`;
-
--- Ajuste Nogara
 
 -- ----------------
 -- Drop sequence --

@@ -14,13 +14,10 @@ FROM `catalogrule` e
 WHERE p.`last_updated_in` IS NULL;
 
 -- Populate `rule_id` column for catalogrule
-
--- Ajuste Nogara
+-- Creating columns for open source
 
 ALTER TABLE `catalogrule_customer_group` ADD COLUMN `rule_id` INT(10) UNSIGNED NOT NULL;
 ALTER TABLE `catalogrule_website` ADD COLUMN `rule_id` INT(10) UNSIGNED NOT NULL;
-
--- Ajuste Nogara
 
 UPDATE `catalogrule_customer_group` v INNER JOIN `catalogrule` e ON v.`row_id` = e.`row_id`
 SET v.`rule_id` = e.`rule_id`
@@ -62,12 +59,9 @@ ALTER TABLE `catalogrule_customer_group`
 ALTER TABLE `catalogrule_website`
     ADD CONSTRAINT `CATALOGRULE_WEBSITE_RULE_ID_CATALOGRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `catalogrule` (`rule_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
--- Ajuste Nogara
-
+-- Removing foreign key MAGENTO_BANNER_CATRULE_RULE_ID_SEQUENCE_CATRULE_SEQUENCE_VAL from magento_banner_catalogrule    
 ALTER TABLE `magento_banner_catalogrule`
 DROP FOREIGN KEY `MAGENTO_BANNER_CATRULE_RULE_ID_SEQUENCE_CATRULE_SEQUENCE_VAL`;
-
--- Ajuste Nogara
 
 -- ----------------
 -- Drop sequence --

@@ -160,18 +160,16 @@ WHERE 1;
 -- Super Link --
 -- -------------
 
--- ALTER TABLE `catalog_product_super_link`
--- Ajuste Nogara
+-- ALTER TABLE `catalog_product_super_link` - foreign key CAT_PRD_SPR_LNK_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL not find
 ALTER TABLE `catalog_product_super_link`
     DROP FOREIGN KEY `CAT_PRD_SPR_LNK_PARENT_ID_CAT_PRD_ENTT_ROW_ID`,
-    -- DROP FOREIGN KEY `CAT_PRD_SPR_LNK_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL`, -- Removi essa linha pois não existia
+    -- DROP FOREIGN KEY `CAT_PRD_SPR_LNK_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL`,
     DROP INDEX `CATALOG_PRODUCT_SUPER_LINK_PARENT_ID`,
     DROP INDEX `CATALOG_PRODUCT_SUPER_LINK_PRODUCT_ID_PARENT_ID`,
     DROP COLUMN `parent_id`,
     CHANGE COLUMN `new_parent_id` `parent_id` INT(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT 'Parent ID',
     ADD INDEX `CATALOG_PRODUCT_SUPER_LINK_PARENT_ID` (`product_id`),
     ADD CONSTRAINT `CATALOG_PRODUCT_SUPER_LINK_PRODUCT_ID_PARENT_ID` UNIQUE KEY (`product_id`,`parent_id`);
--- Ajuste Nogara
 
 -- ------------------
 -- Super Attribute --
@@ -252,8 +250,7 @@ ALTER TABLE `catalog_product_bundle_selection_price`
     CHANGE COLUMN `new_parent_product_id` `parent_product_id` INT(10) UNSIGNED NOT NULL COMMENT 'Parent Product ID',
     ADD PRIMARY KEY (`selection_id`,`parent_product_id`,`website_id`);
 
--- ALTER TABLE `catalog_product_bundle_selection`
--- Ajuste Nogara
+-- ALTER TABLE `catalog_product_bundle_selection` - Foreign key CAT_PRD_BNDL_SELECTION_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL not find 
 ALTER TABLE `catalog_product_bundle_selection`
     DROP FOREIGN KEY `CAT_PRD_BNDL_SELECTION_OPT_ID_SEQUENCE_PRD_BNDL_OPT_SEQUENCE_VAL`,
     DROP FOREIGN KEY `CAT_PRD_BNDL_SELECTION_PARENT_PRD_ID_CAT_PRD_ENTT_ROW_ID`,
@@ -264,9 +261,6 @@ ALTER TABLE `catalog_product_bundle_selection`
     CHANGE COLUMN `new_parent_product_id` `parent_product_id` INT(10) UNSIGNED NOT NULL COMMENT 'Parent Product ID',
     MODIFY COLUMN `selection_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Selection ID',
     ADD PRIMARY KEY (`selection_id`);
--- Ajuste Nogara
-
--- Ajuste Nogara
 DELETE FROM catalog_product_bundle_option 
 WHERE new_parent_id IN (
     SELECT new_parent_id 
@@ -277,8 +271,7 @@ WHERE new_parent_id IN (
         HAVING COUNT(*) > 1
     ) AS duplicates
 );
--- Ajuste Nogara
-
+-- Foreign key remove from drop
 ALTER TABLE `catalog_product_bundle_option`
     DROP FOREIGN KEY `CAT_PRD_BNDL_OPT_OPT_ID_SEQUENCE_PRD_BNDL_OPT_SEQUENCE_VAL`,
     DROP FOREIGN KEY `CAT_PRD_BNDL_OPT_PARENT_ID_CAT_PRD_ENTT_ROW_ID`,
@@ -290,8 +283,6 @@ ALTER TABLE `catalog_product_bundle_option`
     MODIFY COLUMN `option_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Option ID',
     ADD PRIMARY KEY (`option_id`);
 
--- Ajuste Nogara
-
 DELETE FROM catalog_product_bundle_option_value
 WHERE option_id IN (
     SELECT option_id FROM (
@@ -302,7 +293,7 @@ WHERE option_id IN (
     ) AS subquery
 );
 
--- Ajuste Nogara
+-- Foreign key remove from drop
 
 ALTER TABLE `catalog_product_bundle_option_value`
     DROP FOREIGN KEY `CAT_PRD_BNDL_OPT_VAL_OPT_ID_SEQUENCE_PRD_BNDL_OPT_SEQUENCE_VAL`,
@@ -314,8 +305,6 @@ ALTER TABLE `catalog_product_bundle_option_value`
     ADD CONSTRAINT `CAT_PRD_BNDL_OPT_VAL_OPT_ID_PARENT_PRD_ID_STORE_ID` UNIQUE KEY (`option_id`,`parent_product_id`,`store_id`),
     ADD CONSTRAINT `CAT_PRD_BNDL_OPT_VAL_OPT_ID_CAT_PRD_BNDL_OPT_OPT_ID` FOREIGN KEY (`option_id`) REFERENCES `catalog_product_bundle_option` (`option_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
--- Ajuste Nogara
-
 DELETE FROM catalog_product_bundle_selection
 WHERE option_id IN (
     SELECT option_id FROM (
@@ -326,7 +315,7 @@ WHERE option_id IN (
     ) AS temp_table
 );
 
--- Ajuste Nogara
+-- Adjust
 ALTER TABLE `catalog_product_bundle_selection`
     ADD CONSTRAINT `CAT_PRD_BNDL_SELECTION_OPT_ID_CAT_PRD_BNDL_OPT_OPT_ID` FOREIGN KEY (`option_id`) REFERENCES `catalog_product_bundle_option` (`option_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
@@ -401,7 +390,7 @@ ALTER TABLE `catalog_product_entity_media_gallery_value_to_entity`
 	DROP COLUMN `row_id`;
 
 -- Gallery value
--- Ajuste Nogara
+-- Foreign key remove from drop
 ALTER TABLE `catalog_product_entity_media_gallery_value`
     DROP FOREIGN KEY `CAT_PRD_ENTT_MDA_GLR_VAL_ROW_ID_CAT_PRD_ENTT_ROW_ID`,
     DROP INDEX `CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_ROW_ID`,
@@ -409,7 +398,6 @@ ALTER TABLE `catalog_product_entity_media_gallery_value`
     ADD INDEX `CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_ENTITY_ID` (`entity_id`),
     ADD CONSTRAINT `CAT_PRD_ENTT_MDA_GLR_VAL_ENTT_ID_VAL_ID_STORE_ID` UNIQUE KEY (`entity_id`,`value_id`,`store_id`),
 	DROP COLUMN `row_id`;
--- Ajuste Nogara
 
 -- Gallery
 ALTER TABLE `catalog_product_entity_gallery`
@@ -493,11 +481,10 @@ ALTER TABLE `catalog_compare_item`
     DROP FOREIGN KEY `CATALOG_COMPARE_ITEM_PRODUCT_ID_SEQUENCE_PRODUCT_SEQUENCE_VALUE`,
     ADD CONSTRAINT `CATALOG_COMPARE_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
--- Ajuste Nogara
+-- Foreign key remove from drop
 ALTER TABLE `catalog_product_bundle_price_index`
     -- DROP FOREIGN KEY `CAT_PRD_BNDL_PRICE_IDX_ENTT_ID_SEQUENCE_PRD_SEQUENCE_VAL`,
     ADD CONSTRAINT `CAT_PRD_BNDL_PRICE_IDX_ENTT_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`entity_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
--- Ajuste Nogara
 
 ALTER TABLE `catalog_product_index_tier_price`
     DROP FOREIGN KEY `CAT_PRD_IDX_TIER_PRICE_ENTT_ID_SEQUENCE_PRD_SEQUENCE_VAL`,
@@ -508,11 +495,10 @@ ALTER TABLE `catalog_product_website`
     DROP FOREIGN KEY `CAT_PRD_WS_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL`,
     ADD CONSTRAINT `CAT_PRD_WS_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
 
--- Ajuste Nogara
+-- Foreign key remove from drop
 ALTER TABLE `catalog_url_rewrite_product_category`
     -- DROP FOREIGN KEY `CAT_URL_REWRITE_PRD_CTGR_PRD_ID_SEQUENCE_PRD_SEQUENCE_VAL`,
     ADD CONSTRAINT `CAT_URL_REWRITE_PRD_CTGR_PRD_ID_CAT_PRD_ENTT_ENTT_ID` FOREIGN KEY (`product_id`) REFERENCES `catalog_product_entity` (`entity_id`) ON DELETE CASCADE ON UPDATE RESTRICT;
--- Ajuste Nogara
 
 DELETE FROM `cataloginventory_stock_item` WHERE `product_id` NOT IN (SELECT `entity_id` FROM `catalog_product_entity`);
 ALTER TABLE `cataloginventory_stock_item`

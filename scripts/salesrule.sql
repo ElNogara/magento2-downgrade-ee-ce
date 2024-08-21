@@ -66,10 +66,9 @@ ALTER TABLE `salesrule_product_attribute`
     ADD PRIMARY KEY (`rule_id`,`website_id`,`customer_group_id`,`attribute_id`),
     DROP COLUMN `row_id`;
 
--- Ajuste Nogara
+-- Foreign key removed
 ALTER TABLE `salesrule_label`
 DROP FOREIGN KEY `SALESRULE_LABEL_ROW_ID_SALESRULE_ROW_ID`;
--- Ajuste Nogara
 
 
 -- Salesrule
@@ -100,10 +99,8 @@ ALTER TABLE `salesrule_customer`
     DROP FOREIGN KEY `SALESRULE_CUSTOMER_RULE_ID_SEQUENCE_SALESRULE_SEQUENCE_VALUE`,
     ADD CONSTRAINT `SALESRULE_CUSTOMER_RULE_ID_SALESRULE_RULE_ID` FOREIGN KEY (`rule_id`) REFERENCES `salesrule` (`rule_id`);
 
--- Ajuste Nogara
-
+-- Changing column
 ALTER TABLE `salesrule_label`
 CHANGE COLUMN `row_id` `rule_id` INT UNSIGNED NOT NULL COMMENT 'Rule ID';
--- Ajuste Nogara
 
 DROP TABLE `sequence_salesrule`;
